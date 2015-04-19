@@ -1,4 +1,4 @@
-// Using all these things (or not)
+// Namespaces
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -9,28 +9,30 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-// Application main namespace
+// Delta_Slide_Show
+//-----------------------------------------------------------------------------
+// Namespace padrão do editor
 namespace Delta_Slide_Show
 {
-    // Splash
-    //-------------------------------------------------------------------------
-    // This class is for the starting image. Just 4 fun.
+    // Classe da janela de Splash
     public partial class Splash : Form
     {
+        // Variável privada de páscoa
         private bool easter = false;
-        // Constructor
+        
+        // Construtor
         public Splash()
         {
             InitializeComponent();
         }
 
-        // When it loads start the timer
+        // Ao carregar o splash, inicia o timer
         private void Form1_Load(object sender, EventArgs e)
         {
             loadTimer.Start();
         }
 
-        // When titleLabel is clicked, let the easter out
+        // Mostra a essência da páscoa quando clicado
         private void label1_Click(object sender, EventArgs e)
         {
             if (easter)
@@ -45,7 +47,7 @@ namespace Delta_Slide_Show
             }
         }
 
-        // When the timer reaches 2 seconds, it stops and close the window
+        // Fecha a janela quando o timer atinge 2 segundos
         private void loadTimer_Tick(object sender, EventArgs e)
         {
             loadTimer.Stop();
