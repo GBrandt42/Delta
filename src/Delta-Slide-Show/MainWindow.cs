@@ -1,3 +1,4 @@
+// Namespaces
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -10,14 +11,19 @@ using System.Windows.Forms;
 using System.IO;
 using Microsoft.Win32;
 
+// Delta_Slide_Show
+//-----------------------------------------------------------------------------------------
+// Namespace padrão do editor
 namespace Delta_Slide_Show
 {
-
+    // Classe da janela principal
     public partial class MainWindow : Form
     {
+        // Variáveis privadas
         private Dictionary<int, string> sources = new Dictionary<int, string>();
         private string lastSaved = "";
 
+        // Construtor
         public MainWindow()
         {
             InitializeComponent();
@@ -25,11 +31,13 @@ namespace Delta_Slide_Show
             this.slideListView.SelectedIndex = 0;
         }
 
+        // Quando fechar a janela
         private void MainWindow_FormClosed(object sender, FormClosedEventArgs e)
         {
             Application.Exit();
         }
 
+        // Quando o texto da janela  HTML mudar
         private void textBox1_TextChanged(object sender, FastColoredTextBoxNS.TextChangedEventArgs e)
         {
             string foldername = lastSaved.Substring(0, lastSaved.Length - lastSaved.Split('\\')[lastSaved.Split('\\').Length - 1].Length);
@@ -39,17 +47,20 @@ namespace Delta_Slide_Show
             sources[this.slideListView.SelectedIndex] = this.textBox1.Text;
         }
 
+        // Quando o botão de criar novo slide for pressionado
         private void novoSlideToolStripMenuItem_Click(object sender, EventArgs e)
         {
             addSlide();
         }
 
+        // Criação de um slide
         private void addSlide(string source = "<html>\n\t<head>\n\t\t<meta charset='utf-8'>\n\t</head>\n\t<body></body>\n</html>")
         {
             sources[slideListView.Items.Count] = source;
             slideListView.Items.Add("Slide " + (slideListView.Items.Count + 1));
         }
 
+        // Quando o botão de salvar for clicado
         private void salvarToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (lastSaved == null)
@@ -64,7 +75,8 @@ namespace Delta_Slide_Show
                 DeltaPresentation.DeltaFileManager.Save(slideDictionary(), lastSaved);
             }
         }
-
+    
+        // Quando o botão de abrir for clicado
         private void abrirToolStripMenuItem_Click(object sender, EventArgs e)
         {
             openFileDialog.ShowDialog();
@@ -82,6 +94,7 @@ namespace Delta_Slide_Show
             }
         }
 
+        // Quando o item selecionado na caixa de list mudar
         private void listBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (this.slideListView.SelectedIndex < 0) return;
@@ -96,6 +109,7 @@ namespace Delta_Slide_Show
             this.textBox2.Text = this.slideListView.Items[this.slideListView.SelectedIndex].ToString();
         }
 
+        // Aquisição de um Dictionary com os slides e seus nomes
         private Dictionary<string, string> slideDictionary()
         {
             Dictionary<string, string> slides = new Dictionary<string, string>();
@@ -106,6 +120,7 @@ namespace Delta_Slide_Show
             return slides;
         }
 
+        // Quando o botão Salvar Como for apertado
         private void salvarComoToolStripMenuItem_Click(object sender, EventArgs e)
         {
             saveFileDialog.ShowDialog();
@@ -114,22 +129,27 @@ namespace Delta_Slide_Show
             lastSaved = saveFileDialog.FileName;
         }
 
+        // Quando o bobtão de apagar slide for apertado
         private void apagarSlideToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (slideListView.Items.Count > 1)
                 slideListView.Items.RemoveAt(slideListView.SelectedIndex);
         }
 
+        // Quando o texto da janela de nome do slide mudar
         private void textBox2_TextChanged(object sender, EventArgs e)
         {
             this.slideListView.Items[this.slideListView.SelectedIndex] = this.textBox2.Text;
         }
 
+        // Quando a janela carregar
         private void MainWindow_Load(object sender, EventArgs e)
         {
             this.webBrowser1.Size = Screen.PrimaryScreen.Bounds.Size;
             string[] split = Environment.GetCommandLineArgs()[0].Split('\\');
             string exename = split[split.Length - 1].Replace("\"", "");
+            
+            // Alteração do registro para mostrar o HTML corretamente
             if (Environment.Is64BitOperatingSystem)
                 if ((int)Registry.GetValue("HKEY_LOCAL_MACHINE\\SOFTWARE\\Wow6432Node\\Microsoft\\Internet Explorer\\MAIN\\FeatureControl\\FEATURE_BROWSER_EMULATION", exename, RegistryValueKind.DWord) == 9999) return;
             else if ((int)Registry.GetValue("HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Internet Explorer\\MAIN\\FeatureControl\\FEATURE_BROWSER_EMULATION", exename, RegistryValueKind.DWord) == 9999) return;
@@ -146,6 +166,7 @@ namespace Delta_Slide_Show
             }
         }
 
+        // Quando o botão de nova apresentação por pressionado
         private void novoToolStripMenuItem_Click(object sender, EventArgs e)
         {
             DialogResult result = MessageBox.Show(this, "Quer salvar a apresentação atual?", "Salvar", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
@@ -165,6 +186,7 @@ namespace Delta_Slide_Show
             }
         }
 
+        // Quando um botão for pressionado dentro da caixa de lista
         private void slideListView_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Delete)
@@ -177,6 +199,7 @@ namespace Delta_Slide_Show
             }
         }
 
+        // Quando o botão de visualizar apresentação for apertado
         private void doComeçoToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (lastSaved == "") salvarComoToolStripMenuItem_Click(sender, e);
